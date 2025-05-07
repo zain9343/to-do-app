@@ -41,25 +41,24 @@ export class AppComponent implements OnInit {
     );
   }
 
-  onEdit(item: Task){
-    this.taskObj =  item;
+  onEdit(item: Task) {
+    this.taskObj = item;
     setTimeout(() => {
       const dat = new Date(this.taskObj.dueDate);
       const day = ('0' + dat.getDate()).slice(-2);
       const month = ('0' + (dat.getMonth() + 1)).slice(-2);
-      const today = dat.getFullYear() + '-' + (month) + '-' + (day);
+      const today = dat.getFullYear() + '-' + month + '-' + day;
       // tslint:disable-next-line:no-string-literal
-     
-      (<HTMLInputElement>document.getElementById('textDate')).value = today
+
+      (<HTMLInputElement>document.getElementById('textDate')).value = today;
       // const dateField =  document.getElementById('textDate');
       // if(dateField != null) {
       //   dateField['value'] = today;
       // }
-     
     }, 1000);
   }
 
-  updateTask(){
+  updateTask() {
     this.masterService.updateTask(this.taskObj).subscribe(
       (res: ApiResponseModel) => {
         if (res.result) {
@@ -74,19 +73,21 @@ export class AppComponent implements OnInit {
     );
   }
 
-  onDelete(id: number){
+  onDelete(id: number) {
     const isConfirm = confirm('Are you sure you want to delete this?');
-    if(isConfirm){
-      this.masterService.deleteTask(id).subscribe((res: ApiResponseModel) => {
-        if(res.result){
-          alert('Task Deleted Successfully');
-          this.loadAllTask();
-          this.taskObj = new Task();
+    if (isConfirm) {
+      this.masterService.deleteTask(id).subscribe(
+        (res: ApiResponseModel) => {
+          if (res.result) {
+            alert('Task Deleted Successfully');
+            this.loadAllTask();
+            this.taskObj = new Task();
+          }
+        },
+        (error) => {
+          alert('API call error');
         }
-      }, error => {
-        alert('API call error');
-      })
+      );
     }
-
   }
 }
